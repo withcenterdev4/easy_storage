@@ -1,7 +1,2 @@
-library easy_storage;
-
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export './src/widget/storage.upload_selection_bottom_sheet.dart';
+export './src/storage.service.dart';
