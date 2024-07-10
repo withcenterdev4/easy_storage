@@ -1,5 +1,5 @@
 name: easy_storage
-description: "A new Flutter package project."
+description: "Storage package for easy upload into Firebase"
 version: 0.0.1
 homepage: https://github.com/thruthesky/easy_storage
 
