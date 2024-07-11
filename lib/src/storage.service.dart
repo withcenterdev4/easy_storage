@@ -122,10 +122,19 @@ class StorageService {
   /// If the url is null, it does nothing.
   ///
   /// It will produce an Exception on error.
-  Future<void> delete(String? url) async {
+  ///
+  ///
+  /// if the ref and the field is pass it will delete the url in the firesotre when you save
+  /// the url
+  Future<void> delete(String? url,
+      {DocumentReference? ref, String? field}) async {
     if (url == null || url == '') return;
     final storageRef = FirebaseStorage.instance.refFromURL(url);
     await storageRef.delete();
+
+    if (ref != null && field != null) {
+      await ref.update({field: FieldValue.delete()});
+    }
 
     return;
   }
@@ -249,7 +258,6 @@ class StorageService {
     required String field,
     Function(double)? progress,
     Function()? complete,
-    int compressQuality = 80,
     String? saveAs,
     bool camera = true,
     bool gallery = true,
@@ -274,7 +282,6 @@ class StorageService {
         context: context,
         progress: progress,
         complete: complete,
-        compressQuality: compressQuality,
         saveAs: saveAs,
         camera: camera,
         gallery: gallery,
@@ -287,11 +294,17 @@ class StorageService {
     if (url == null) return null;
 
     /// Upload success, update the field
-    ref.update({field: url});
+    if (!snapshot.exists) {
+      ref.set({field: url});
+    } else {
+      ref.update({field: url});
+    }
 
     /// Delete old url
-    await delete(oldUrl);
-
+    ///
+    if (oldUrl != null) {
+      await delete(oldUrl);
+    }
     return url;
   }
 
